@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using tellkoStories.API.Data;
 using tellkoStories.API.Models.Domain;
 using tellkoStories.API.Models.DTO;
+using tellkoStories.API.Repositories.Interface;
 
 namespace tellkoStories.API.Controllers
 {
@@ -10,10 +11,10 @@ namespace tellkoStories.API.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly ApplicationDbContext dbContext;
-        public CategoriesController(ApplicationDbContext dbContext)
+        private readonly ICategoryRepository categoryRepository;
+        public CategoriesController(ICategoryRepository categoryRepository)
         {
-            this.dbContext = dbContext;   
+            this.categoryRepository = categoryRepository;
         }
 
 
@@ -26,8 +27,7 @@ namespace tellkoStories.API.Controllers
                 UrlHandle = request.UrlHandle,
             };
 
-            await dbContext.Categories.AddAsync(category);
-            await dbContext.SaveChangesAsync();
+            await categoryRepository.CreateAsync(category);
 
             var response = new CategoryDto()
             {
