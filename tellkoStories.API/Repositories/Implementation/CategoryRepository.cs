@@ -1,4 +1,5 @@
-﻿using tellkoStories.API.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using tellkoStories.API.Data;
 using tellkoStories.API.Models.Domain;
 using tellkoStories.API.Repositories.Interface;
 
@@ -18,6 +19,11 @@ namespace tellkoStories.API.Repositories.Implementation
             await dbContext.SaveChangesAsync();
 
             return category;
+        }
+
+        public async Task<IEnumerable<Category>> GetAllAsync()
+        {
+            return await dbContext.Categories.ToListAsync();
         }
     }
 }
