@@ -79,5 +79,33 @@ namespace tellkoStories.API.Controllers
             };
             return Ok(response);
         }
+
+        // PUT: /api/categories/{id}
+        [HttpPut]
+        [Route("{id:guid}")]
+        public async Task<IActionResult> EditCategory([FromRoute] Guid id, UpdateCategoryRequestDto request)
+        {
+            // Converting DTO to Domain Model
+            var category = new Category
+            {
+                Id = id,
+                Name = request.Name,
+                UrlHandle = request.UrlHandle,
+            };
+
+            category = await categoryRepository.UpdateAsync(category);
+            if(category is null)
+            {
+                return NotFound();
+            }
+            // Converting Domain Model to DTO
+            var response = new CategoryDto
+            {
+                Id = category.Id,
+                Name = category.Name,
+                UrlHandle = category.UrlHandle,
+            };
+            return Ok(response);
+        }
     }
 }
