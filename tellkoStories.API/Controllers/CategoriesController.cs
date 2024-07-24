@@ -107,5 +107,25 @@ namespace tellkoStories.API.Controllers
             };
             return Ok(response);
         }
+
+        // DELETE: /api/categoried/{id}
+        [HttpDelete]
+        [Route("{id:guid}")]
+        public async Task<IActionResult> DeleteCategory([FromRoute] Guid id)
+        {
+            var category = await categoryRepository.DeleteAsync(id);
+            if(category is null)
+            {
+                return NotFound();
+            }
+            // Converting Domain model to DTO
+            var response = new CategoryDto
+            {
+                Id = category.Id,
+                Name = category.Name,
+                UrlHandle = category.UrlHandle,
+            };
+            return Ok(response);
+        }
     }
 }
