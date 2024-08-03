@@ -1,4 +1,5 @@
-﻿using tellkoStories.API.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using tellkoStories.API.Data;
 using tellkoStories.API.Models.Domain;
 using tellkoStories.API.Repositories.Interface;
 
@@ -17,6 +18,11 @@ namespace tellkoStories.API.Repositories.Implementation
             await dbContext.BlogPosts.AddAsync(blogPost);
             await dbContext.SaveChangesAsync();
             return blogPost;
+        }
+
+        public async Task<IEnumerable<BlogPost>> GetAllAsync()
+        {
+            return await dbContext.BlogPosts.ToListAsync();
         }
     }
 }
