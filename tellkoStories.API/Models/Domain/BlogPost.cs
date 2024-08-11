@@ -13,5 +13,6 @@ namespace tellkoStories.API.Models.Domain
         public DateTime PublishedDate { get; set; }
         public string Author { get; set; }
         public bool IsVisible { get; set; }
+        public ICollection<Category> Categories { get; set; }
     }
 }
