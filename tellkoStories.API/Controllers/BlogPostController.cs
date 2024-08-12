@@ -13,10 +13,12 @@ namespace tellkoStories.API.Controllers
     public class BlogPostController : ControllerBase
     {
         private readonly IBlogPostRepository blogPostRepository;
+        private readonly ICategoryRepository categoryRepository;
 
-        public BlogPostController(IBlogPostRepository blogPostRepository)
+        public BlogPostController(IBlogPostRepository blogPostRepository, ICategoryRepository categoryRepository)
         {
             this.blogPostRepository = blogPostRepository;
+            this.categoryRepository = categoryRepository;
         }
 
 
@@ -35,7 +37,18 @@ namespace tellkoStories.API.Controllers
                 Title = request.Title,
                 ShortDescription = request.ShortDescription,
                 UrlHandle = request.UrlHandle,
+                Categories = new List<Category>(),
             };
+
+            foreach(var categoryGuid in request.Categories)
+            {
+                var existingCategory = await categoryRepository.GetById(categoryGuid);
+                if(existingCategory is not null)
+                {
+                    blogPost.Categories.Add(existingCategory);
+                }
+            }
+
             blogPost = await blogPostRepository.CreateAsync(blogPost);
             // Converting Domain Model to DTO
             var response = new BlogPostDto
@@ -49,6 +62,12 @@ namespace tellkoStories.API.Controllers
                 Title = blogPost.Title,
                 ShortDescription = blogPost.ShortDescription,
                 UrlHandle = blogPost.UrlHandle,
+                Categories = blogPost.Categories.Select(x => new CategoryDto
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    UrlHandle = x.UrlHandle,
+                }).ToList()
             };
             return Ok(response);
         }
