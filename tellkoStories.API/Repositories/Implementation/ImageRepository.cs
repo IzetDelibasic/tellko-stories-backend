@@ -8,9 +8,9 @@ namespace tellkoStories.API.Repositories.Implementation
     public class ImageRepository : IImageRepository
     {
         private readonly IWebHostEnvironment webHostEnvironment;
-        private readonly HttpContextAccessor httpContextAccessor;
+        private readonly IHttpContextAccessor httpContextAccessor;
         private readonly ApplicationDbContext dbContext;
-        public ImageRepository(IWebHostEnvironment _webHostEnvironment, HttpContextAccessor _httpContextAccessor, ApplicationDbContext _dbContext) 
+        public ImageRepository(IWebHostEnvironment _webHostEnvironment, IHttpContextAccessor _httpContextAccessor, ApplicationDbContext _dbContext) 
         { 
             this.webHostEnvironment = _webHostEnvironment;
             this.httpContextAccessor = _httpContextAccessor;
@@ -22,10 +22,12 @@ namespace tellkoStories.API.Repositories.Implementation
             var localPath = Path.Combine(webHostEnvironment.ContentRootPath, "Images", $"{blogImage.FileName}{blogImage.FileExtension}");
 
             using var stream = new FileStream(localPath, FileMode.Create);
+
             await file.CopyToAsync(stream);
 
             // Updating the database
-            var httpRequest = httpContextAccessor.HttpContext.Request
+            var httpRequest = httpContextAccessor.HttpContext.Request;
+
             var urlPath = $"{httpRequest.Scheme}://{httpRequest.Host}{httpRequest.PathBase}/Images/{blogImage.FileName}{blogImage.FileExtension}";
 
             blogImage.Url = urlPath;

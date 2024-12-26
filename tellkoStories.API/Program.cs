@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using tellkoStories.API.Data;
 using tellkoStories.API.Repositories.Implementation;
 using tellkoStories.API.Repositories.Interface;
@@ -41,6 +42,12 @@ app.UseCors(options =>
 });
 
 app.UseAuthorization();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Images")),
+    RequestPath = "/Images"
+});
 
 app.MapControllers();
 
