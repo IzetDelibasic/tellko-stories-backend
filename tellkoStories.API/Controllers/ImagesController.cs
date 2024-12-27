@@ -15,8 +15,31 @@ namespace tellkoStories.API.Controllers
             this.imageRepository = _imageRepository;
         }
 
+        // GET: {apibaseurl}/api/Images
+        [HttpGet]
+        public async Task<IActionResult> GetAllImages()
+        {
+            // Calling Image repository to getting all images
+            var images = await imageRepository.GetAllImages();
 
-        // POST: {apibaseurl}/api/images
+            // Converting Domain Model to DTO
+            var response = new List<BlogImageDto>();
+            foreach (var image in images)
+            {
+                response.Add(new BlogImageDto
+                {
+                    Id = image.Id,
+                    Title = image.Title,
+                    DateCreated = image.DateCreated,
+                    FileExtension = image.FileExtension,
+                    FileName = image.FileName,
+                    Url = image.Url
+                });
+            }
+            return Ok(response);
+        }
+
+        // POST: {apibaseurl}/api/Images
         [HttpPost]
         public async Task<IActionResult> UploadImage([FromForm] IFormFile file, [FromForm] string fileName, [FromForm] string title)
         {

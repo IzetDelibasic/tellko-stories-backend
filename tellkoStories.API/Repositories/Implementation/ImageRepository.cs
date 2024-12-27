@@ -16,6 +16,12 @@ namespace tellkoStories.API.Repositories.Implementation
             this.httpContextAccessor = _httpContextAccessor;
             this.dbContext = _dbContext;
         }
+
+        public async Task<IEnumerable<BlogImage>> GetAllImages()
+        {
+            return await dbContext.BlogImages.ToListAsync();
+        }
+
         public async Task<BlogImage> Upload(IFormFile file, BlogImage blogImage)
         {
             // Uploading Image to API/Images
