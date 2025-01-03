@@ -16,9 +16,9 @@ namespace tellkoStories.API.Controllers
             this.userManager = _userManager;
         }
 
-        // POST: {apibaseurl/api/auth/register
+        // POST: {apibaseurl/api/Auth/Register
         [HttpPost]
-        [Route("register")]
+        [Route("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
         {
             // Creating IdentityUser Object
@@ -62,6 +62,42 @@ namespace tellkoStories.API.Controllers
                     }
                 }
             }
+
+            return ValidationProblem(ModelState);
+        }
+
+        // POST: {apibaseurl/api/Auth/Login
+        [HttpPost]
+        [Route("Login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
+        {
+            // Checking Email
+            var identityUser = await userManager.FindByEmailAsync(request.Email);
+            
+            if(identityUser is not null)
+            {
+                // Checking Password
+                var checkPasswordResult = await userManager.CheckPasswordAsync(identityUser, request.Password);
+
+                if (checkPasswordResult)
+                {
+                    var roles = await userManager.GetRolesAsync(identityUser);
+
+                    // Creating a Token and Response
+
+                    var responese = new LoginResponseDto()
+                    {
+                        Email = request.Email,
+                        Roles = roles.ToList(),
+                        Token = "Token"
+                    };
+
+                    return Ok();
+                }
+            
+            }
+
+            ModelState.AddModelError("", "Email or Password Incorrect");
 
             return ValidationProblem(ModelState);
         }
