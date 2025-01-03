@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using tellkoStories.API.Data;
 using tellkoStories.API.Models.Domain;
@@ -42,6 +43,7 @@ namespace tellkoStories.API.Controllers
 
         // GET: /api/categories
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAllCategories()
         {
             var categories = await categoryRepository.GetAllAsync();
