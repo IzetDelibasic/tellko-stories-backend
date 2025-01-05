@@ -43,7 +43,6 @@ namespace tellkoStories.API.Controllers
 
         // GET: /api/categories
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> GetAllCategories()
         {
             var categories = await categoryRepository.GetAllAsync();

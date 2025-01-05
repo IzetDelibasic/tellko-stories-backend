@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using tellkoStories.API.Models.DTO;
+using tellkoStories.API.Repositories.Interface;
 
 namespace tellkoStories.API.Controllers
 {
@@ -10,10 +11,12 @@ namespace tellkoStories.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly UserManager<IdentityUser> userManager;
+        private readonly ITokenRepository tokenRepository;
 
-        public AuthController(UserManager<IdentityUser> _userManager)
+        public AuthController(UserManager<IdentityUser> _userManager, ITokenRepository _tokenRepository)
         {
             this.userManager = _userManager;
+            this.tokenRepository = _tokenRepository;
         }
 
         // POST: {apibaseurl/api/Auth/Register
@@ -85,14 +88,16 @@ namespace tellkoStories.API.Controllers
 
                     // Creating a Token and Response
 
-                    var responese = new LoginResponseDto()
+                    var jwtToken = tokenRepository.CreateJwtToken(identityUser, roles.ToList());
+
+                    var response = new LoginResponseDto()
                     {
                         Email = request.Email,
                         Roles = roles.ToList(),
-                        Token = "Token"
+                        Token = jwtToken
                     };
 
-                    return Ok();
+                    return Ok(response);
                 }
             
             }
