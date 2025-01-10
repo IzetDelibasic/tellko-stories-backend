@@ -20,6 +20,7 @@ namespace tellkoStories.API.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryRequestDto request)
         {
             var category = new Category()
@@ -42,7 +43,6 @@ namespace tellkoStories.API.Controllers
         }
 
         // GET: /api/categories
-        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllCategories()
         {
@@ -85,6 +85,7 @@ namespace tellkoStories.API.Controllers
         // PUT: /api/categories/{id}
         [HttpPut]
         [Route("{id:guid}")]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> EditCategory([FromRoute] Guid id, UpdateCategoryRequestDto request)
         {
             // Converting DTO to Domain Model
@@ -113,6 +114,7 @@ namespace tellkoStories.API.Controllers
         // DELETE: /api/categoried/{id}
         [HttpDelete]
         [Route("{id:guid}")]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> DeleteCategory([FromRoute] Guid id)
         {
             var category = await categoryRepository.DeleteAsync(id);
