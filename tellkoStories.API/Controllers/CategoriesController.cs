@@ -42,6 +42,7 @@ namespace tellkoStories.API.Controllers
         }
 
         // GET: /api/categories
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllCategories()
         {
