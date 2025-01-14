@@ -37,7 +37,7 @@ namespace tellkoStories.API.Repositories.Implementation
         {
             // Query
             var categories = dbContext.Categories.AsQueryable();
-            
+
             // Filtering
             if (string.IsNullOrWhiteSpace(query) == false)
             {

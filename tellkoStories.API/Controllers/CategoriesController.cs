@@ -46,7 +46,7 @@ namespace tellkoStories.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllCategories([FromQuery] string? query)
         {
-            var categories = await categoryRepository.GetAllAsync();
+            var categories = await categoryRepository.GetAllAsync(query);
 
             // Map domain model to DTO 
 
