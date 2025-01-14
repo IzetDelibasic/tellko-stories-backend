@@ -42,9 +42,9 @@ namespace tellkoStories.API.Controllers
 
         }
 
-        // GET: /api/categories
+        // GET: /api/categories?filterQuery
         [HttpGet]
-        public async Task<IActionResult> GetAllCategories()
+        public async Task<IActionResult> GetAllCategories([FromQuery] string? query)
         {
             var categories = await categoryRepository.GetAllAsync();
 
