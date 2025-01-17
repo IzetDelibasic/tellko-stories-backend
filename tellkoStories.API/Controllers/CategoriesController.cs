@@ -44,9 +44,11 @@ namespace tellkoStories.API.Controllers
 
         // GET: /api/categories?filterQuery
         [HttpGet]
-        public async Task<IActionResult> GetAllCategories([FromQuery] string? query)
+        public async Task<IActionResult> GetAllCategories([FromQuery] string? query, 
+            [FromQuery] string? sortBy,
+            [FromQuery] string? sortDirection)
         {
-            var categories = await categoryRepository.GetAllAsync(query);
+            var categories = await categoryRepository.GetAllAsync(query, sortBy, sortDirection);
 
             // Map domain model to DTO 
 
