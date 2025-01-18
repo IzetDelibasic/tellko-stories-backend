@@ -44,11 +44,14 @@ namespace tellkoStories.API.Controllers
 
         // GET: /api/categories?filterQuery
         [HttpGet]
-        public async Task<IActionResult> GetAllCategories([FromQuery] string? query, 
+        public async Task<IActionResult> GetAllCategories(
+            [FromQuery] string? query, 
             [FromQuery] string? sortBy,
-            [FromQuery] string? sortDirection)
+            [FromQuery] string? sortDirection,
+            [FromQuery] int? pageNumber,
+            [FromQuery] int? pageSize)
         {
-            var categories = await categoryRepository.GetAllAsync(query, sortBy, sortDirection);
+            var categories = await categoryRepository.GetAllAsync(query, sortBy, sortDirection, pageNumber, pageSize);
 
             // Map domain model to DTO 
 
@@ -113,7 +116,7 @@ namespace tellkoStories.API.Controllers
             return Ok(response);
         }
 
-        // DELETE: /api/categoried/{id}
+        // DELETE: /api/categories/{id}
         [HttpDelete]
         [Route("{id:guid}")]
         [Authorize(Roles = "Writer")]

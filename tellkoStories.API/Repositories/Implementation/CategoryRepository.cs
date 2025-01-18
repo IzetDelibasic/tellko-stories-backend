@@ -34,7 +34,10 @@ namespace tellkoStories.API.Repositories.Implementation
         }
 
         public async Task<IEnumerable<Category>> GetAllAsync(string? query = null, 
-            string? sortBy = null, string? sortDirection = null)
+            string? sortBy = null, 
+            string? sortDirection = null,
+            int? pageNumber = 1,
+            int? pageSize = 100)
         {
             // Query
             var categories = dbContext.Categories.AsQueryable();
@@ -66,6 +69,11 @@ namespace tellkoStories.API.Repositories.Implementation
                     categories = isAsc ? categories.OrderBy(x => x.UrlHandle) : categories.OrderByDescending(x => x.UrlHandle);
                 }
             }
+
+            // Pagination
+
+            var skipResults = (pageNumber - 1) * pageSize;
+            categories = categories.Skip(skipResults ?? 0).Take(pageSize ?? 100);
 
 
             return await categories.ToListAsync();
