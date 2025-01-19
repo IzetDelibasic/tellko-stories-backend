@@ -86,6 +86,11 @@ namespace tellkoStories.API.Repositories.Implementation
             return await dbContext.Categories.FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<int> GetCount()
+        {
+            return await dbContext.Categories.CountAsync();
+        }
+
         public async Task<Category?> UpdateAsync(Category category)
         {
             var existingCategory =  await dbContext.Categories.FirstOrDefaultAsync(x => x.Id == category.Id);

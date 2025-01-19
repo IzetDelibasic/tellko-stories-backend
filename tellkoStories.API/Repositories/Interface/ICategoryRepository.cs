@@ -13,5 +13,6 @@ namespace tellkoStories.API.Repositories.Interface
         Task<Category?>GetById(Guid id);
         Task<Category?>UpdateAsync(Category category);
         Task<Category?>DeleteAsync(Guid id);
+        Task<int> GetCount();
     }
 }
